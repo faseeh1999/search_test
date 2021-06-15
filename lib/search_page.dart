@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:search_test/new_screen.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -9,7 +11,13 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _pres = TextEditingController();
-  String searchString = null;
+  String searchString;
+  @override
+  void initState() {
+    super.initState();
+    Future res = Firebase.initializeApp();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +92,13 @@ class _SearchPageState extends State<SearchPage> {
                                 children: snapshot.data.docs
                                     .map((DocumentSnapshot document) {
                                   return new ListTile(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: NewScreen(),
+                                              type: PageTransitionType.fade));
+                                    },
                                     title: new Text(document['name']),
                                   );
                                 }).toList(),
